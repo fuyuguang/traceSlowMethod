@@ -1,4 +1,5 @@
 package com.fyg.tracemethod
+import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Type
@@ -23,6 +24,7 @@ class TraceMethodVisitorV2(
     var traceConfig: Config,  val  monitoringTimeThreshold :Long
 ) : AdviceAdapter(api, mv, access, name, desc) {
 
+    private var enablePrintTime: Boolean? =  false
     private var methodName: String? = null
     private var name1: String? = null
     private var className: String? = null
@@ -38,7 +40,6 @@ class TraceMethodVisitorV2(
     }
 
     private var slotIndex = 0
-
     override fun onMethodEnter() {
         super.onMethodEnter()
 
@@ -144,11 +145,15 @@ class TraceMethodVisitorV2(
             )
             mv.visitLabel(label0)
 
-
             //new
-
         }
 
+
+    }
+
+    override fun visitAnnotation(descriptor: String?, visible: Boolean): AnnotationVisitor {
+        enablePrintTime = descriptor?.contains("Lcom.fyg.monitor.tracemethod/PrintTime;")
+        return super.visitAnnotation(descriptor, visible)
     }
 
     private fun generatorMethodName(): String? {

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.fragment.app.FragmentActivity
+import com.fyg.monitor.tracemethod.PrintTime
 import com.fyg.tracemethod.R
 import com.fyg.tracemethod.ui.test.TestSlowMethodActivity
 
@@ -27,6 +28,7 @@ class SlowMethodActivity : FragmentActivity() {
         setContentView(R.layout.activity_slow_method)
     }
 
+    @PrintTime
     fun mBtnSleep200(v: View){
 
         Thread.sleep(200)
@@ -36,6 +38,7 @@ class SlowMethodActivity : FragmentActivity() {
         Thread.sleep(50)
     }
 
+    @PrintTime
     fun mBtnSleep100(v: View){
         Thread.sleep(100)
     }
