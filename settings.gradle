@@ -1,0 +1,3 @@
+rootProject.name = "traceMethod"
+include ':app'
+include ':tracemethod'

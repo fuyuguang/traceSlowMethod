@@ -1,0 +1,63 @@
+
+apply from: "./../config.gradle"
+apply plugin: 'groovy'
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'kotlin'
+
+
+/** gradle中同时使用groovy和kotlin时，默认情况下groovy代码不能引用kotlin编写的类，执行gradle打包是回报告找不到类的错误。  */
+compileGroovy {
+    dependsOn tasks.getByPath('compileKotlin')
+    classpath += files(compileKotlin.destinationDir)
+}
+
+
+
+
+sourceSets {
+    main {
+        groovy {
+            srcDir '../tracemethod/src/main/groovy'
+        }
+
+        java {
+            srcDir '../tracemethod/src/main/java'
+        }
+
+        resources {
+            srcDir '../tracemethod/src/main/resources'
+        }
+    }
+}
+
+
+dependencies {
+    implementation gradleApi()
+    implementation localGroovy()
+    implementation "com.android.tools.build:gradle:$Gradle_Plugin_Version"
+//    implementation group: 'org.ow2.asm', name: 'asm', version: '9.3'
+    implementation 'org.ow2.asm:asm:9.3'
+    implementation 'org.ow2.asm:asm-commons:9.3'
+}
+
+
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: uri('../repo'))
+        pom.groupId = 'com.fyg'
+        pom.artifactId = 'tracemethod-plugin'
+        pom.version = "1.0.0"
+    }
+}
+
+//
+//plugins {
+//    id 'java-library'
+//}
+
+
+//java {
+//    sourceCompatibility = JavaVersion.VERSION_1_8
+//    targetCompatibility = JavaVersion.VERSION_1_8
+//}

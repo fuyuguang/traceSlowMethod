@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Button
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/mBtnSleep50"
+        android:text="mBtnSleep50"
+        android:layout_width="match_parent"
+        android:onClick="mBtnSleep50"
+        android:layout_height="100dip"/>
+
+
+    <Button
+        app:layout_constraintTop_toBottomOf="@+id/mBtnSleep50"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/mBtnSleep100"
+        android:layout_width="match_parent"
+        android:text="mBtnSleep100"
+        android:onClick="mBtnSleep100"
+        android:layout_height="100dip"/>
+
+
+
+    <Button
+        app:layout_constraintTop_toBottomOf="@+id/mBtnSleep100"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/mBtnSleep200"
+        android:text="mBtnSleep200"
+        android:onClick="mBtnSleep200"
+        android:layout_width="match_parent"
+        android:layout_height="100dip"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

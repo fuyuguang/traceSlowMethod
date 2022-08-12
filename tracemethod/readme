@@ -1,0 +1,69 @@
+{
+            methodVisitor = classWriter.visitMethod(ACC_PUBLIC | ACC_STATIC, "haha", "()V", null, null);
+            methodVisitor.visitCode();
+            methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
+            methodVisitor.visitVarInsn(LSTORE, 0);
+            methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
+            methodVisitor.visitVarInsn(LLOAD, 0);
+            methodVisitor.visitInsn(LSUB);
+            methodVisitor.visitVarInsn(LSTORE, 2);
+            methodVisitor.visitVarInsn(LLOAD, 2);
+            methodVisitor.visitLdcInsn(new Long(100L));
+            methodVisitor.visitInsn(LCMP);
+            Label label0 = new Label();
+            methodVisitor.visitJumpInsn(IFLE, label0);
+            methodVisitor.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+            methodVisitor.visitTypeInsn(NEW, "java/lang/StringBuilder");
+            methodVisitor.visitInsn(DUP);
+            methodVisitor.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "()V", false);
+            methodVisitor.visitLdcInsn(" differ : ");
+            methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
+            methodVisitor.visitVarInsn(LLOAD, 2);
+            methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(J)Ljava/lang/StringBuilder;", false);
+            methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString", "()Ljava/lang/String;", false);
+            methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+            methodVisitor.visitLabel(label0);
+            methodVisitor.visitInsn(RETURN);
+            methodVisitor.visitMaxs(4, 4);
+            methodVisitor.visitEnd();
+        }
+{
+            methodVisitor = classWriter.visitMethod(ACC_PUBLIC | ACC_STATIC, "haha", "()V", null, null);
+            methodVisitor.visitCode();
+            methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
+            methodVisitor.visitVarInsn(LSTORE, 0);
+            methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
+            methodVisitor.visitVarInsn(LLOAD, 0);
+            methodVisitor.visitInsn(LSUB);
+            methodVisitor.visitVarInsn(LSTORE, 2);
+            methodVisitor.visitMethodInsn(INVOKESTATIC, "java/lang/Thread", "currentThread", "()Ljava/lang/Thread;", false);
+            methodVisitor.visitMethodInsn(INVOKESTATIC, "android/os/Looper", "getMainLooper", "()Landroid/os/Looper;", false);
+            methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "android/os/Looper", "getThread", "()Ljava/lang/Thread;", false);
+            Label label0 = new Label();
+            methodVisitor.visitJumpInsn(IF_ACMPNE, label0);
+            methodVisitor.visitVarInsn(LLOAD, 2);
+            methodVisitor.visitLdcInsn(new Long(100L));
+            methodVisitor.visitInsn(LCMP);
+            methodVisitor.visitJumpInsn(IFLE, label0);
+            methodVisitor.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+            methodVisitor.visitTypeInsn(NEW, "java/lang/StringBuilder");
+            methodVisitor.visitInsn(DUP);
+            methodVisitor.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "()V", false);
+            methodVisitor.visitLdcInsn(" differ : ");
+            methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false);
+            methodVisitor.visitVarInsn(LLOAD, 2);
+            methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(J)Ljava/lang/StringBuilder;", false);
+            methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString", "()Ljava/lang/String;", false);
+            methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+            methodVisitor.visitLabel(label0);
+            methodVisitor.visitInsn(RETURN);
+            methodVisitor.visitMaxs(4, 4);
+            methodVisitor.visitEnd();
+        }
+
+
+
+
+
+//Task :tracemethod:compileKotlin FAILED
+//'compileJava' task (current target is 11) and 'compileKotlin' task (current target is 1.8) jvm target compatibility should be set to the same Java version.
