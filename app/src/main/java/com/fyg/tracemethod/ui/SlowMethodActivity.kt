@@ -38,7 +38,7 @@ class SlowMethodActivity : FragmentActivity() {
         Thread.sleep(50)
     }
 
-    @PrintTime
+
     fun mBtnSleep100(v: View){
         Thread.sleep(100)
     }

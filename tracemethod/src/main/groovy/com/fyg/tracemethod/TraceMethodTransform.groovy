@@ -47,7 +47,7 @@ public class TraceMethodTransform extends BaseTransform{
                 if (config.isNeedTraceClass(name)) {
                     ClassReader classReader = new ClassReader(file.bytes)
                     ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS)
-                    ClassVisitor cv = new TraceClassVisitorV1(ASM_VERSION, classWriter, config,traceMethodConfig.monitoringTimeThreshold)
+                    ClassVisitor cv = new TraceClassVisitorV2(ASM_VERSION, classWriter, config,traceMethodConfig.monitoringTimeThreshold)
                     classReader.accept(cv, EXPAND_FRAMES)
                     byte[] code = classWriter.toByteArray()
                     FileOutputStream fos = new FileOutputStream(
@@ -95,7 +95,7 @@ public class TraceMethodTransform extends BaseTransform{
                     jarOutputStream.putNextEntry(zipEntry)
                     ClassReader classReader = new ClassReader(IOUtils.toByteArray(inputStream))
                     ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS)
-                    ClassVisitor cv = new TraceClassVisitorV1(ASM_VERSION, classWriter, config,traceMethodConfig.monitoringTimeThreshold)
+                    ClassVisitor cv = new TraceClassVisitorV2(ASM_VERSION, classWriter, config,traceMethodConfig.monitoringTimeThreshold)
                     classReader.accept(cv, EXPAND_FRAMES)
                     byte[] code = classWriter.toByteArray()
                     jarOutputStream.write(code)
