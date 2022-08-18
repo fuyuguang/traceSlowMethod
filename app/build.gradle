@@ -43,9 +43,19 @@ dependencies {
 }
 
 
-apply plugin: 'com.fyg.tracemethod'
+apply plugin: 'com.fyg.tracethread'
 
+apply plugin: 'com.fyg.tracemethod'
+//
 traceMethod {
+    open = true
+    logTraceInfo = true
+    traceConfigFile = "${project.projectDir}/tracemethodconfig.txt"
+    monitoringTimeThreshold = 70
+}
+
+
+traceThread {
     open = true
     logTraceInfo = true
     traceConfigFile = "${project.projectDir}/tracemethodconfig.txt"

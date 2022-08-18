@@ -49,7 +49,7 @@ public abstract class BaseTransform extends Transform {
     public void transform(TransformInvocation transformInvocation) throws TransformException, InterruptedException, IOException {
         super.transform(transformInvocation);
 
-        println '*****************-------- transform exec  --------*********************'
+
         init(project,transformInvocation);
 
         Collection<TransformInput> inputs = transformInvocation.inputs

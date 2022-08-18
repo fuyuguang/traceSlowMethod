@@ -19,9 +19,8 @@ class TraceMethodPlugin implements Plugin<Project>{
     @Override
     public void apply(Project project) {
         project.getExtensions().create("traceMethod",TraceMethodConfig.class);
-        println '*****************-------- com.fyg.tracemethod  plugin apply  --------*********************'
+        println '*****************-------- TraceMethodPlugin plugin apply  --------*********************'
         AppExtension appExtension = project.getExtensions().getByType(AppExtension.class);
         appExtension.registerTransform(new TraceMethodTransform(project));
     }
-
 }

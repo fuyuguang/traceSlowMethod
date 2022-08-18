@@ -36,6 +36,16 @@
 
 
     <Button
+        app:layout_constraintTop_toBottomOf="@+id/mBtnSleep100"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/mGetImei"
+        android:text="mGetImei"
+        android:onClick="mGetImei"
+        android:layout_width="match_parent"
+        android:layout_height="100dip"/>
+
+
+    <Button
         app:layout_constraintTop_toBottomOf="@+id/mBtnSleep200"
         app:layout_constraintRight_toRightOf="parent"
         android:id="@+id/mGogoTestSlowMethodActivity"

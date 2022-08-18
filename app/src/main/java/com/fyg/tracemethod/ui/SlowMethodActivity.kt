@@ -1,9 +1,12 @@
 package com.fyg.tracemethod.ui
 
+import android.Manifest.permission
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.telephony.TelephonyManager
 import android.view.View
-import androidx.activity.ComponentActivity
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import com.fyg.monitor.tracemethod.PrintTime
 import com.fyg.tracemethod.R
@@ -36,6 +39,7 @@ class SlowMethodActivity : FragmentActivity() {
 
     fun mBtnSleep50(v: View){
         Thread.sleep(50)
+        exec()
     }
 
 
@@ -45,4 +49,39 @@ class SlowMethodActivity : FragmentActivity() {
     fun mGogoTestSlowMethodActivity(v: View){
         startActivity(Intent(this@SlowMethodActivity,TestSlowMethodActivity::class.java))
     }
+
+
+    fun mGetImei(v: View){
+        getIMEI()
+    }
+
+
+
+
+    fun exec() {
+        Thread {
+        Thread.sleep(1300)
+            println(11111) }.start()
+    }
+
+
+    fun getIMEI(): String? {
+        val telManager = getSystemService(TELEPHONY_SERVICE) as TelephonyManager
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                permission.READ_PHONE_STATE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return ""
+        }
+        return if (telManager == null) "null" else telManager.deviceId
+    }
+
 }
