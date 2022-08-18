@@ -9,6 +9,9 @@ import org.objectweb.asm.Opcodes;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -23,28 +26,26 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class ASMTransform {
 
-    public static <T extends ClassVisitor> byte[] transform(byte[] bytes,Class<T> classVisitorClass) throws IOException {
+    public static <T extends ClassVisitor> byte[] transform(byte[] bytes,Class<T> classVisitor)  {
         ClassReader classReader = new ClassReader(bytes);
         ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
         try {
-            Constructor<? extends ClassVisitor> constructor = classVisitorClass.getConstructor(int.class, ClassVisitor.class);
-            constructor.setAccessible(true);
-            ClassVisitor classVisitor = constructor.newInstance(Opcodes.ASM5, classWriter);
-            classReader.accept(classVisitor, ClassReader.EXPAND_FRAMES);
+            MethodHandle constructor = MethodHandles.lookup().findConstructor(classVisitor, MethodType.methodType(void.class,int.class, ClassVisitor.class));
+            T invoke = (T) constructor.invoke(Opcodes.ASM5, classWriter);
+            classReader.accept(invoke, ClassReader.EXPAND_FRAMES);
             return classWriter.toByteArray();
 
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
         }
-
         return null;
     }
+
+
 
     public interface Factory{
         ClassVisitor create(int ASMVersion,ClassWriter classWriter);
