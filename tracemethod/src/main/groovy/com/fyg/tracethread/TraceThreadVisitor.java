@@ -7,15 +7,10 @@ import com.fyg.util.Constant;
 import com.fyg.util.Constant.MethodDesc;
 import com.fyg.util.Log;
 
-import org.apache.commons.io.IOUtils;
-import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.commons.AdviceAdapter;
-
-import java.io.IOException;
 
 /**
  * Created by fuyuguang on 2022/8/18 10:51 上午.
@@ -28,7 +23,7 @@ import java.io.IOException;
  */
 public class TraceThreadVisitor extends ClassVisitor {
 
-    private static final String threadClassName = "com/fyg/tracemethod/ui/thread/CustomThread";
+    private static final String CustomThreadInternalName = "com/fyg/tracemethod/ui/thread/CustomThread";
     private static final String IMEIClassName = "com/fyg/tracemethod/ui/thread/IMEI";
     private String className;
 
@@ -86,7 +81,7 @@ public class TraceThreadVisitor extends ClassVisitor {
             if (opcode == Opcodes.NEW && Thread_INTERNAL_NAME.equals(s)) {
 
                 find = true;
-                mv.visitTypeInsn(Opcodes.NEW, threadClassName);
+                mv.visitTypeInsn(Opcodes.NEW, CustomThreadInternalName);
                 return;
             }
             super.visitTypeInsn(opcode, s);
@@ -98,9 +93,9 @@ public class TraceThreadVisitor extends ClassVisitor {
 
             Log.e(Constant.TAG.TAG, "opcode :%s  ,owner : %s  , className  : %s , method : %s, name :  %s ,  desc:%s",opcode,owner, className, methodName, name, desc);
 
-            if (Thread_INTERNAL_NAME.equals(owner) && !className.equals(threadClassName) && opcode == Opcodes.INVOKESPECIAL && find) {
+            if (Thread_INTERNAL_NAME.equals(owner) && !className.equals(CustomThreadInternalName) && opcode == Opcodes.INVOKESPECIAL && find) {
                 find = false;
-                mv.visitMethodInsn(opcode, threadClassName, name, desc, itf);
+                mv.visitMethodInsn(opcode, CustomThreadInternalName, name, desc, itf);
 //                Log.e(Constant.TAG.TAG, "className : %s,  method : %s, name : %s", className, methodName, name);
                 return;
             }

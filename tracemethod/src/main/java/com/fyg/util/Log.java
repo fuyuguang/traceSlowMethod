@@ -76,6 +76,23 @@ public class Log {
         }
     }
 
+    public static void e(Object tag, final String msg, final Object... obj) {
+        if (!(tag instanceof String)){
+            tag = getTag(tag);
+        }
+        if (logImp != null) {
+            logImp.e((String)tag, msg, obj);
+        }
+    }
+
+    private static String getTag(Object obj){
+        Class<?> aClass = obj.getClass();
+        if (aClass.isAnonymousClass() || aClass.isLocalClass()){
+            return aClass.getName();
+        }
+        return aClass.getSimpleName();
+    }
+
     public static void w(final String tag, final String msg, final Object... obj) {
         if (logImp != null) {
             logImp.w(tag, msg, obj);

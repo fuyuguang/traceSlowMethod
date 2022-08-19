@@ -15,7 +15,7 @@ import org.gradle.api.Project
  * 类描述：
  * 备注：
  * 思路：
- * 统计方法运行时间，耗时方法大于阀值用mmap存到本地，用workmanager 定时上报，间接统计anr？
+ *
  */
 class TraceThreadPlugin implements Plugin<Project>{
     @Override

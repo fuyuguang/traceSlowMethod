@@ -49,7 +49,6 @@ public class TraceThreadTransform extends BaseTransform{
             directoryInput.file.eachFileRecurse { File file ->
                 def name = file.name
                 if (config.isNeedTraceClass(name)) {
-
                     println '*****************-------- TraceThreadPlugin  traceSrcFiles --------*********************'
                     byte[] code = ASMTransform.transform(file.bytes,TraceThreadVisitor.class)
                     FileOutputStream fos = new FileOutputStream(

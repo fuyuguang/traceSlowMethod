@@ -1,6 +1,11 @@
 package com.fyg.util;
 
 
+import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
+import static org.objectweb.asm.Opcodes.ACC_NATIVE;
+
+import com.fyg.tracemethod.TraceClassVisitorV2;
+
 import org.apache.commons.io.IOUtils;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
@@ -49,5 +54,17 @@ public class ASMTransform {
 
     public interface Factory{
         ClassVisitor create(int ASMVersion,ClassWriter classWriter);
+    }
+
+
+
+
+
+    public static String getTag(Object obj){
+        Class<?> aClass = obj.getClass();
+        if (aClass.isAnonymousClass() || aClass.isLocalClass()){
+            return aClass.getName();
+        }
+        return aClass.getSimpleName();
     }
 }

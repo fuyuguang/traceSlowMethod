@@ -76,5 +76,19 @@ class Utils {
                 }
             }
         }
+
+
+
+
+        @JvmStatic
+        fun getTag(obj: Any): String? {
+            val aClass: Class<*> = obj.javaClass
+            return if (aClass.isAnonymousClass || aClass.isLocalClass) {
+                aClass.name
+            } else aClass.simpleName
+        }
+
+
     }
+
 }

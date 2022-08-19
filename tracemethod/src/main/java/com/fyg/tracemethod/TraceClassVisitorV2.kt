@@ -1,4 +1,6 @@
 package com.fyg.tracemethod
+import com.fyg.util.FilterUtil
+import com.fyg.util.Log
 import org.objectweb.asm.*
 import org.objectweb.asm.commons.AdviceAdapter
 import java.lang.Long
@@ -37,12 +39,13 @@ class TraceClassVisitorV2(api: Int, cv: ClassVisitor?, var traceConfig: Config, 
         //是否是配置的需要插桩的类
         name?.let { className ->
             isConfigTraceClass = traceConfig.isConfigTraceClass(className)
-            System.out.println("isConfigTraceClass is : "+isConfigTraceClass +"     className : "+className)
         }
 
+        //不需要跟踪
         val isNotNeedTraceClass = isABSClass || !isConfigTraceClass
+        // 需要打印出所有被插桩的类和方法  |  需要跟踪
         if (traceConfig.mIsNeedLogTraceInfo && !isNotNeedTraceClass) {
-            println("MethodTraceMan-trace-class: ${className ?: "未知"}")
+            Log.e(this, "MethodTrace-trace-class: ", className?:"未知")
         }
     }
 
@@ -53,72 +56,52 @@ class TraceClassVisitorV2(api: Int, cv: ClassVisitor?, var traceConfig: Config, 
         signature: String?,
         exceptions: Array<out String>?
     ): MethodVisitor {
-        val isConstructor = MethodFilter.isConstructor(name)
-        System.out.println("222222")
-        System.out.println("isConfigTraceClass : "+isConfigTraceClass +" isABSClass : "+isABSClass +"  isConstructor : "+isConstructor +"     className : "+className+"     methodName : "+name)
-        System.out.println("(!isConfigTraceClass || (isABSClass || isConstructor))  : "+(!isConfigTraceClass || (isABSClass || isConstructor)))
-        System.out.println("---------")
-        System.out.println("  ")
-
-//        return if (!isConfigTraceClass || (isABSClass || isConstructor)) {
-//            super.visitMethod(access, name, desc, signature, exceptions)
-//        } else {
-//
-//            val mv = cv.visitMethod(access, name, desc, signature, exceptions)
-//            TraceMethodVisitorV2(api, mv, access, name, desc, className, traceConfig,monitoringTimeThreshold)
-//        }
-
         val mv = cv.visitMethod(access, name, desc, signature, exceptions)
         return TraceMethodVisitorV2(api, mv, access, name, desc, className, traceConfig,monitoringTimeThreshold)
-
     }
 
 
-
-
     inner class TraceMethodVisitorV2(
-        api: Int, mv: MethodVisitor?, access: Int,
-        name: String?, desc: String?, className: String?,
+        api: Int, mv: MethodVisitor?, access: Int, name: String?, desc: String?, className: String?,
         var traceConfig: Config,  val  monitoringTimeThreshold :Long
     ) : AdviceAdapter(api, mv, access, name, desc) {
 
         private var enablePrintTime: Boolean? =  false
         private var methodName: String? = null
-        private var name1: String? = null
+        private var originMethodName: String? = null
         private var className: String? = null
         private val maxSectionNameLength = 127
-
 
         init {
             val traceMethod = TraceMethod.create(0, access, className, name, desc)
             this.methodName = traceMethod.getMethodNameText()
             this.className = className
-            this.name1 = name
+            this.originMethodName = name
 
         }
 
-        fun hah():Boolean{
 
-            System.out.println("enablePrintTime1 : "+enablePrintTime+" isConfigTraceClass "+isConfigTraceClass+"  isABSClass "+isABSClass+"  methodName :"+methodName)
-
-            if(enablePrintTime!!){
+        /**
+            拦截无效的 文件：未被跟踪的，虚方法，构造方法等  */
+        private fun interceptedInvalidateClass():Boolean{
+            
+            if(enablePrintTime!!){ //启用注解
                 return false;
             }else{
+                //不是被跟踪的类 | 是抽象方法 |  是构造方法   返回true, 拦截掉事件，不需要统计
                 return !isConfigTraceClass || (isABSClass || MethodFilter.isConstructor(name))
             }
-//            return  (!enablePrintTime!! || !isConfigTraceClass || (isABSClass || MethodFilter.isConstructor(name)))
         }
 
         private var slotIndex = 0
         override fun onMethodEnter() {
             super.onMethodEnter()
 
-            if (hah()){
+            if (interceptedInvalidateClass()){
                 return
             }
 
             val methodName = generatorMethodName()
-            System.out.println("enablePrintTime11 : "+enablePrintTime+" isConfigTraceClass "+isConfigTraceClass+"  isABSClass "+isABSClass+"  methodName :"+methodName)
 
             //new
             slotIndex = newLocal(Type.LONG_TYPE)
@@ -138,22 +121,20 @@ class TraceClassVisitorV2(api: Int, cv: ClassVisitor?, var traceConfig: Config, 
 
             //new
             if (traceConfig.mIsNeedLogTraceInfo) {
-                println("MethodTraceMan-trace-method: ${methodName ?: "未知"}")
+                println("MethodTrace-trace-method: ${methodName ?: "未知"}")
+
+                Log.e(this, "MethodTrace-trace-class: ", className?:"未知")
             }
         }
 
         override fun onMethodExit(opcode: Int) {
-//            super.onMethodExit(opcode)
 
-            if (hah()){
+            if (interceptedInvalidateClass()){
                 return
             }
-
             val methodName = generatorMethodName()
-            println("fyg : methodName    ${methodName ?: "未知"}")
-            System.out.println("enablePrintTime11 : "+enablePrintTime+" isConfigTraceClass "+isConfigTraceClass+"  isABSClass "+isABSClass+"  methodName :"+methodName)
 
-            if (opcode >= IRETURN && opcode <= RETURN || opcode == ATHROW) {
+            if (FilterUtil.isMethodEnd(opcode)) {
                 mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
                 mv.visitVarInsn(LLOAD, slotIndex)
                 mv.visitInsn(LSUB)
@@ -185,8 +166,6 @@ class TraceClassVisitorV2(api: Int, cv: ClassVisitor?, var traceConfig: Config, 
                 val label0 = Label()
                 mv.visitJumpInsn(IF_ACMPNE, label0)
                 mv.visitVarInsn(LLOAD, slotIndex)
-//            mv.visitLdcInsn(100L)
-//            mv.visitLdcInsn(Long(monitoringTimeThreshold))
                 mv.visitLdcInsn(monitoringTimeThreshold)
 
 
@@ -236,7 +215,6 @@ class TraceClassVisitorV2(api: Int, cv: ClassVisitor?, var traceConfig: Config, 
 
         override fun visitAnnotation(descriptor: String?, visible: Boolean): AnnotationVisitor {
             enablePrintTime = descriptor?.contains("Lcom/fyg/monitor/tracemethod/PrintTime;")
-            System.out.println("enablePrintTime  : "+enablePrintTime +  " descriptor : "+descriptor)
             return super.visitAnnotation(descriptor, visible)
         }
 
