@@ -19,6 +19,25 @@ class TraceMethod {
             traceMethod.desc = desc?.replace("/", ".")
             return traceMethod
         }
+
+
+        fun generatorMethodName(methodName:String?): String? {
+            val maxSectionNameLength = 127
+            var sectionName = methodName
+            var length = sectionName?.length ?: 0
+            if (length > maxSectionNameLength && !sectionName.isNullOrBlank()) {
+                // 先去掉参数
+                val parmIndex = sectionName.indexOf('(')
+                sectionName = sectionName.substring(0, parmIndex)
+                // 如果依然更大，直接裁剪
+                length = sectionName.length
+                if (length > 127) {
+                    sectionName = sectionName.substring(length - maxSectionNameLength)
+                }
+            }
+            return sectionName
+        }
+
     }
 
 

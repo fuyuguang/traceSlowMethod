@@ -28,8 +28,6 @@ class TraceMethodVisitorV2(
     private var methodName: String? = null
     private var name1: String? = null
     private var className: String? = null
-    private val maxSectionNameLength = 127
-
 
     init {
         val traceMethod = TraceMethod.create(0, access, className, name, desc)
@@ -61,14 +59,11 @@ class TraceMethodVisitorV2(
 
         //new
         if (traceConfig.mIsNeedLogTraceInfo) {
-            println("MethodTraceMan-trace-method: ${methodName ?: "未知"}")
+            println("MethodTrace-trace-method: ${TraceMethod.generatorMethodName(methodName) ?: "未知"}")
         }
     }
 
     override fun onMethodExit(opcode: Int) {
-
-        val methodName = generatorMethodName()
-        println("fyg : methodName    ${methodName ?: "未知"}")
 
         if (opcode >= IRETURN && opcode <= RETURN || opcode == ATHROW) {
             mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
@@ -102,8 +97,6 @@ class TraceMethodVisitorV2(
             val label0 = Label()
             mv.visitJumpInsn(IF_ACMPNE, label0)
             mv.visitVarInsn(LLOAD, slotIndex)
-//            mv.visitLdcInsn(100L)
-//            mv.visitLdcInsn(Long(monitoringTimeThreshold))
             mv.visitLdcInsn(monitoringTimeThreshold)
 
 
@@ -113,7 +106,7 @@ class TraceMethodVisitorV2(
             mv.visitTypeInsn(NEW, "java/lang/StringBuilder")
             mv.visitInsn(DUP)
             mv.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "()V", false)
-            mv.visitLdcInsn("  differ :  "+methodName)
+            mv.visitLdcInsn("  differ :  "+TraceMethod.generatorMethodName(methodName))
             mv.visitMethodInsn(
                 INVOKEVIRTUAL,
                 "java/lang/StringBuilder",
@@ -147,29 +140,10 @@ class TraceMethodVisitorV2(
 
             //new
         }
-
-
     }
 
     override fun visitAnnotation(descriptor: String?, visible: Boolean): AnnotationVisitor {
         enablePrintTime = descriptor?.contains("Lcom.fyg.monitor.tracemethod/PrintTime;")
         return super.visitAnnotation(descriptor, visible)
     }
-
-    private fun generatorMethodName(): String? {
-        var sectionName = methodName
-        var length = sectionName?.length ?: 0
-        if (length > maxSectionNameLength && !sectionName.isNullOrBlank()) {
-            // 先去掉参数
-            val parmIndex = sectionName.indexOf('(')
-            sectionName = sectionName.substring(0, parmIndex)
-            // 如果依然更大，直接裁剪
-            length = sectionName.length
-            if (length > 127) {
-                sectionName = sectionName.substring(length - maxSectionNameLength)
-            }
-        }
-        return sectionName
-    }
-
 }

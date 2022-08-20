@@ -39,6 +39,7 @@ dependencies {
 //    implementation group: 'org.ow2.asm', name: 'asm', version: '9.3'
     implementation 'org.ow2.asm:asm:9.3'
     implementation 'org.ow2.asm:asm-commons:9.3'
+    implementation files('libs/android-32.jar')
 }
 
 

@@ -4,6 +4,7 @@ import com.fyg.util.Log
 import org.objectweb.asm.*
 import org.objectweb.asm.commons.AdviceAdapter
 import java.lang.Long
+import java.util.logging.Filter
 
 
 class TraceClassVisitorV2(api: Int, cv: ClassVisitor?, var traceConfig: Config, var monitoringTimeThreshold : Long) :
@@ -26,7 +27,7 @@ class TraceClassVisitorV2(api: Int, cv: ClassVisitor?, var traceConfig: Config, 
 
         this.className = name
         //抽象方法或者接口
-        if (access and Opcodes.ACC_ABSTRACT > 0 || access and Opcodes.ACC_INTERFACE > 0) {
+        if (FilterUtil.hasOpcodesWithOr(access,Opcodes.ACC_ABSTRACT,Opcodes.ACC_INTERFACE)){
             this.isABSClass = true
         }
 
@@ -37,9 +38,8 @@ class TraceClassVisitorV2(api: Int, cv: ClassVisitor?, var traceConfig: Config, 
         }
 
         //是否是配置的需要插桩的类
-        name?.let { className ->
-            isConfigTraceClass = traceConfig.isConfigTraceClass(className)
-        }
+        isConfigTraceClass =  traceConfig.isConfigTraceClass(name);
+
 
         //不需要跟踪
         val isNotNeedTraceClass = isABSClass || !isConfigTraceClass
@@ -70,7 +70,6 @@ class TraceClassVisitorV2(api: Int, cv: ClassVisitor?, var traceConfig: Config, 
         private var methodName: String? = null
         private var originMethodName: String? = null
         private var className: String? = null
-        private val maxSectionNameLength = 127
 
         init {
             val traceMethod = TraceMethod.create(0, access, className, name, desc)
@@ -89,7 +88,7 @@ class TraceClassVisitorV2(api: Int, cv: ClassVisitor?, var traceConfig: Config, 
                 return false;
             }else{
                 //不是被跟踪的类 | 是抽象方法 |  是构造方法   返回true, 拦截掉事件，不需要统计
-                return !isConfigTraceClass || (isABSClass || MethodFilter.isConstructor(name))
+                return !isConfigTraceClass || (isABSClass || FilterUtil.isConstructor(name))
             }
         }
 
@@ -100,8 +99,6 @@ class TraceClassVisitorV2(api: Int, cv: ClassVisitor?, var traceConfig: Config, 
             if (interceptedInvalidateClass()){
                 return
             }
-
-            val methodName = generatorMethodName()
 
             //new
             slotIndex = newLocal(Type.LONG_TYPE)
@@ -121,7 +118,7 @@ class TraceClassVisitorV2(api: Int, cv: ClassVisitor?, var traceConfig: Config, 
 
             //new
             if (traceConfig.mIsNeedLogTraceInfo) {
-                println("MethodTrace-trace-method: ${methodName ?: "未知"}")
+                println("MethodTrace-trace-method: ${TraceMethod.generatorMethodName(methodName) ?: "未知"}")
 
                 Log.e(this, "MethodTrace-trace-class: ", className?:"未知")
             }
@@ -132,7 +129,6 @@ class TraceClassVisitorV2(api: Int, cv: ClassVisitor?, var traceConfig: Config, 
             if (interceptedInvalidateClass()){
                 return
             }
-            val methodName = generatorMethodName()
 
             if (FilterUtil.isMethodEnd(opcode)) {
                 mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
@@ -175,7 +171,7 @@ class TraceClassVisitorV2(api: Int, cv: ClassVisitor?, var traceConfig: Config, 
                 mv.visitTypeInsn(NEW, "java/lang/StringBuilder")
                 mv.visitInsn(DUP)
                 mv.visitMethodInsn(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "()V", false)
-                mv.visitLdcInsn("  differ :  "+methodName)
+                mv.visitLdcInsn("  differ :  "+TraceMethod.generatorMethodName(methodName))
                 mv.visitMethodInsn(
                     INVOKEVIRTUAL,
                     "java/lang/StringBuilder",
@@ -209,33 +205,11 @@ class TraceClassVisitorV2(api: Int, cv: ClassVisitor?, var traceConfig: Config, 
 
                 //new
             }
-
-
         }
 
         override fun visitAnnotation(descriptor: String?, visible: Boolean): AnnotationVisitor {
             enablePrintTime = descriptor?.contains("Lcom/fyg/monitor/tracemethod/PrintTime;")
             return super.visitAnnotation(descriptor, visible)
         }
-
-        private fun generatorMethodName(): String? {
-            var sectionName = methodName
-            var length = sectionName?.length ?: 0
-            if (length > maxSectionNameLength && !sectionName.isNullOrBlank()) {
-                // 先去掉参数
-                val parmIndex = sectionName.indexOf('(')
-                sectionName = sectionName.substring(0, parmIndex)
-                // 如果依然更大，直接裁剪
-                length = sectionName.length
-                if (length > 127) {
-                    sectionName = sectionName.substring(length - maxSectionNameLength)
-                }
-            }
-            return sectionName
-        }
-
     }
-
-
-
 }

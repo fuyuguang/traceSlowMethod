@@ -23,7 +23,7 @@ class TestSlowMethodActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_slow_method)
+        setContentView(R.layout.activity_test_slow_method)
     }
 
 

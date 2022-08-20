@@ -2,7 +2,8 @@ package com.fyg.util;
 
 import static com.fyg.util.Constant.InternalName.STRING_INTERNAL_NAME;
 
-import com.fyg.tracemethod.TraceClassVisitorV2;
+
+import android.telephony.TelephonyManager;
 
 import org.objectweb.asm.Type;
 
@@ -25,8 +26,7 @@ public class Constant {
         String Thread_INTERNAL_NAME =  Type.getInternalName(Thread.class);
         /**
          "android/telephony/TelephonyManager"  */
-        String TelephonyManager_INTERNAL_NAME = "android/telephony/TelephonyManager";
-
+        String TelephonyManager_INTERNAL_NAME = Type.getInternalName(TelephonyManager.class);
     }
 
     public interface ClassDesc{
@@ -61,5 +61,6 @@ public class Constant {
         System.out.println(STRING_INTERNAL_NAME);
         System.out.println(STRING_ClassDesc);
         System.out.println(MethodDesc.P_Ls_R_v);
+        System.out.println(InternalName.TelephonyManager_INTERNAL_NAME);
     }
 }

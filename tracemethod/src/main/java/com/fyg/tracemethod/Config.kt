@@ -32,25 +32,46 @@ class Config {
     //是否需要打印出所有被插桩的类和方法
     var mIsNeedLogTraceInfo = false
 
+    companion object{
+        private val UNNEED_TRACE_CLASS = arrayOf("R.class", "R$", "Manifest", "BuildConfig")
 
-    fun isNeedTraceClass(fileName: String): Boolean {
-        var isNeed = true
-        if (fileName.endsWith(".class")) {
-            for (unTraceCls in UNNEED_TRACE_CLASS) {
-                if (fileName.contains(unTraceCls)) {
-                    isNeed = false
-                    break
+        @JvmStatic
+        fun isNeedTraceClass(fileName: String): Boolean {
+            var isNeed = true
+            if (fileName.endsWith(".class")) {
+                for (unTraceCls in UNNEED_TRACE_CLASS) {
+                    if (fileName.contains(unTraceCls)) {
+                        isNeed = false
+                        break
+                    }
                 }
+            } else {
+                isNeed = false
             }
-        } else {
-            isNeed = false
+            return isNeed
         }
-        return isNeed
     }
 
-    //判断是否是traceConfig.txt中配置范围的类
-    fun isConfigTraceClass(className: String): Boolean {
+//    fun isNeedTraceClass(fileName: String): Boolean {
+//        var isNeed = true
+//        if (fileName.endsWith(".class")) {
+//            for (unTraceCls in UNNEED_TRACE_CLASS) {
+//                if (fileName.contains(unTraceCls)) {
+//                    isNeed = false
+//                    break
+//                }
+//            }
+//        } else {
+//            isNeed = false
+//        }
+//        return isNeed
+//    }
 
+    //判断是否是traceConfig.txt中配置范围的类
+    fun isConfigTraceClass(className: String?): Boolean {
+        if (className.isNullOrBlank()){
+            return false
+        }
         fun isInNeedTracePackage(): Boolean {
             var isIn = false
             mNeedTracePackageMap.forEach {
