@@ -46,7 +46,22 @@ dependencies {
 apply plugin: 'com.fyg.tracethread'
 
 apply plugin: 'com.fyg.tracemethod'
-//
+
+apply plugin: 'com.fyg.tracereferencemethod'
+
+
+referenceMethodConfig {
+    open = true
+    targetClassName = "android/telephony/TelephonyManager"
+    targetMethodName = "getDeviceId"
+    targetMethodDesc = "()Ljava/lang/String;"
+
+    replaceClassName = "com/fyg/tracemethod/ui/thread/IMEI"
+    replaceMethodName = "getDeviceId"
+    replaceMethodDesc = "()Ljava/lang/String;"
+
+}
+
 traceMethod {
     open = true
     logTraceInfo = true

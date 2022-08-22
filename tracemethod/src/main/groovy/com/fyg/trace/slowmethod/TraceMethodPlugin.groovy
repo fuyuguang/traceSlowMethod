@@ -1,4 +1,4 @@
-package com.fyg.tracemethod
+package com.fyg.trace.slowmethod
 
 import com.android.build.gradle.AppExtension;
 

@@ -1,9 +1,9 @@
-package com.fyg.tracethread;
+package com.fyg.trace.threadfinish;
 
 import static com.fyg.util.Constant.InternalName.Thread_INTERNAL_NAME;
 
 import com.fyg.util.Constant;
-import com.fyg.util.Constant.MethodDesc;
+import com.fyg.util.FilterUtil;
 import com.fyg.util.Log;
 
 import org.objectweb.asm.ClassVisitor;
@@ -48,7 +48,9 @@ public class TraceThreadVisitor extends ClassVisitor {
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc,
                                      String signature, String[] exceptions) {
-
+        if (FilterUtil.hasOpcodesWithOr(access,Opcodes.ACC_ABSTRACT,Opcodes.ACC_NATIVE)){
+            return cv.visitMethod(access, name, desc, signature, exceptions);
+        }
         MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions);
         return new TraceMethodAdapter(api, methodVisitor, access, name, desc, this.className);
     }
@@ -95,19 +97,9 @@ public class TraceThreadVisitor extends ClassVisitor {
             if (Thread_INTERNAL_NAME.equals(owner) && !className.equals(CustomThreadInternalName) && opcode == Opcodes.INVOKESPECIAL && find) {
                 find = false;
                 mv.visitMethodInsn(opcode, CustomThreadInternalName, name, desc, itf);
-//                Log.e(Constant.TAG.TAG, "className : %s,  method : %s, name : %s", className, methodName, name);
                 return;
             }
             super.visitMethodInsn(opcode, owner, name, desc, itf);
-
-
-//            if (owner.equals(TelephonyManager_INTERNAL_NAME) && name.equals("getDeviceId") && desc.equals(MethodDesc.P_Ls_R_v)) {
-////                Log.e(Constant.TAG.TAG, "get imei className:%s, method:%s, name:%s,  desc:%s", className, methodName, name, desc);
-////                super.visitMethodInsn();
-//            }
-
-
-
         }
 
         private int timeLocalIndex = 0;

@@ -1,30 +1,19 @@
 package com.fyg.transform.base
 
-import com.android.build.api.transform.DirectoryInput
-import com.android.build.api.transform.Format
-import com.android.build.api.transform.JarInput
+import com.android.build.api.transform.*
 import com.android.build.api.transform.QualifiedContent.ContentType
 import com.android.build.api.transform.QualifiedContent.Scope
-import com.android.build.api.transform.Transform
-import com.android.build.api.transform.TransformException
-import com.android.build.api.transform.TransformInput
-import com.android.build.api.transform.TransformInvocation
-import com.android.build.api.transform.TransformOutputProvider
 import com.android.build.gradle.internal.pipeline.TransformManager
 import com.fyg.tracemethod.Config
-import com.fyg.util.ASMTransform
 import org.apache.commons.codec.digest.DigestUtils
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import org.gradle.api.Project
-import org.objectweb.asm.ClassVisitor
-import org.objectweb.asm.ClassWriter
 
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
 import java.util.jar.JarOutputStream
 import java.util.zip.ZipEntry
-
 /**
  * Created by fuyuguang on 2022/8/11 11:07 上午.
  * E-Mail ：2355245065@qq.com
@@ -82,7 +71,7 @@ public abstract class BaseTransform extends Transform {
         }
     }
 
-    public abstract byte[] transformSrcFiles(File file);
+    public abstract byte[] transformSrcFiles(File file) throws FileNotFoundException;
     public void traceSrcFiles(DirectoryInput directoryInput, TransformOutputProvider outputProvider) {
         if (directoryInput.file.isDirectory()) {
             directoryInput.file.eachFileRecurse { File file ->

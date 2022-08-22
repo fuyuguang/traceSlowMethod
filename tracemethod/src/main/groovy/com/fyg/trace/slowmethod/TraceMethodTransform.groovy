@@ -1,6 +1,8 @@
-package com.fyg.tracemethod
+package com.fyg.trace.slowmethod
 
 import com.android.build.api.transform.*
+import com.fyg.tracemethod.Config
+import com.fyg.tracemethod.TraceSlowMethodVisitor
 import com.fyg.transform.base.BaseTransform
 import com.fyg.util.ASMTransform
 import org.gradle.api.Project
@@ -18,7 +20,7 @@ import org.objectweb.asm.ClassWriter
  */
 public class TraceMethodTransform extends BaseTransform{
     TraceMethodConfig traceMethodConfig ;
-     Config config ;
+    Config config ;
 
     public TraceMethodTransform(Project project) {
         super(project);

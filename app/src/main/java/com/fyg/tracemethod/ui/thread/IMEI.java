@@ -11,7 +11,7 @@ package com.fyg.tracemethod.ui.thread;
  */
 public class IMEI {
 
-    public String getDeviceId(){
+    public static String getDeviceId(){
 
         System.out.println("imei : \n"+getStackTrace(Thread.currentThread().getStackTrace()));
         return null;

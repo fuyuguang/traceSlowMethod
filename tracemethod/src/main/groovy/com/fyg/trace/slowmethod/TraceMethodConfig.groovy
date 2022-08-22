@@ -1,4 +1,4 @@
-package com.fyg.tracemethod;
+package com.fyg.trace.slowmethod;
 
 /**
  * Created by fuyuguang on 2022/8/11 11:04 上午.

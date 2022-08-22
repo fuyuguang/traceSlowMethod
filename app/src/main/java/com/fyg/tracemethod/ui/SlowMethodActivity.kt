@@ -67,21 +67,24 @@ class SlowMethodActivity : FragmentActivity() {
 
     fun getIMEI(): String? {
         val telManager = getSystemService(TELEPHONY_SERVICE) as TelephonyManager
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                permission.READ_PHONE_STATE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return ""
-        }
-        return if (telManager == null) "null" else telManager.deviceId
-    }
+//        if (ActivityCompat.checkSelfPermission(
+//                this,
+//                permission.READ_PHONE_STATE
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            return ""
+//        }
 
+        if (telManager == null)
+            return "null"
+        else
+            return  telManager.deviceId
+    }
 }

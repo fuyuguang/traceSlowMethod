@@ -1,8 +1,7 @@
-package com.fyg.tracethread
+package com.fyg.trace.threadfinish
 
 import com.android.build.gradle.AppExtension
-import com.fyg.tracemethod.TraceMethodConfig
-import com.fyg.tracemethod.TraceMethodTransform
+import com.fyg.trace.slowmethod.TraceMethodConfig
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 

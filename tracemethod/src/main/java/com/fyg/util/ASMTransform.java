@@ -44,7 +44,6 @@ public class ASMTransform {
 
         ClassReader classReader = new ClassReader(bytes);
         ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS);
-//        ClassVisitor cv = new TraceClassVisitorV2(Opcodes.ASM5, classWriter, config, traceMethodConfig.monitoringTimeThreshold);
         ClassVisitor cv = factory.create(ASM_VERSION, classWriter);
         classReader.accept(cv, ClassReader.EXPAND_FRAMES);
         return  classWriter.toByteArray();
