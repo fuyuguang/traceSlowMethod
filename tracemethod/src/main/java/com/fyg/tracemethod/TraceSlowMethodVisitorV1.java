@@ -3,6 +3,8 @@ package com.fyg.tracemethod;
 import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
 import static org.objectweb.asm.Opcodes.ACC_NATIVE;
 
+import com.fyg.util.FilterUtil;
+
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -23,10 +25,10 @@ import org.objectweb.asm.commons.AdviceAdapter;
  添加时间阀值
 
  */
-public class TraceMethodVisitorV1 extends ClassVisitor {
+public class TraceSlowMethodVisitorV1 extends ClassVisitor {
     private String ownerName;
 
-    public TraceMethodVisitorV1(int api, ClassVisitor classVisitor) {
+    public TraceSlowMethodVisitorV1(int api, ClassVisitor classVisitor) {
         super(api, classVisitor);
     }
 
@@ -39,12 +41,8 @@ public class TraceMethodVisitorV1 extends ClassVisitor {
     @Override
     public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
         MethodVisitor mv = super.visitMethod(access, name, descriptor, signature, exceptions);
-        if (mv != null) {
-            boolean isAbstractMethod = (access & ACC_ABSTRACT) != 0;
-            boolean isNativeMethod = (access & ACC_NATIVE) != 0;
-            if (!isAbstractMethod && !isNativeMethod) {
-                mv = new MethodTimerAdapter4(api, mv, access, name, descriptor,ownerName);
-            }
+        if (mv != null && FilterUtil.isGeneralMethod(access,name) ) {
+            mv = new MethodTimerAdapter4(api, mv, access, name, descriptor,ownerName);
         }
         return mv;
     }
@@ -73,7 +71,7 @@ public class TraceMethodVisitorV1 extends ClassVisitor {
 
         @Override
         protected void onMethodExit(int opcode) {
-            if ((opcode >= IRETURN && opcode <= RETURN) || opcode == ATHROW) {
+            if (FilterUtil.isMethodEnd(opcode)) {
                 mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false);
                 mv.visitVarInsn(LLOAD, slotIndex);
                 mv.visitInsn(LSUB);

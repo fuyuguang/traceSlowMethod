@@ -52,21 +52,6 @@ class Config {
         }
     }
 
-//    fun isNeedTraceClass(fileName: String): Boolean {
-//        var isNeed = true
-//        if (fileName.endsWith(".class")) {
-//            for (unTraceCls in UNNEED_TRACE_CLASS) {
-//                if (fileName.contains(unTraceCls)) {
-//                    isNeed = false
-//                    break
-//                }
-//            }
-//        } else {
-//            isNeed = false
-//        }
-//        return isNeed
-//    }
-
     //判断是否是traceConfig.txt中配置范围的类
     fun isConfigTraceClass(className: String?): Boolean {
         if (className.isNullOrBlank()){
@@ -77,7 +62,6 @@ class Config {
             mNeedTracePackageMap.forEach {
 
                 if (className.contains(it)) {
-                    System.out.println("mNeedTracePackageMap.forEach className.contains(it)  className :"+className +"       it "+it)
                     isIn = true
                     return@forEach
                 }
@@ -90,7 +74,6 @@ class Config {
             var isIn = false
             mWhitePackageMap.forEach {
                 if (className.contains(it)) {
-                    System.out.println("mWhitePackageMap.forEach className.contains(it)  className :"+className +"       it "+it)
                     isIn = true
                     return@forEach
                 }
@@ -103,7 +86,6 @@ class Config {
             var isIn = false
             mWhiteClassMap.forEach {
                 if (className == it) {
-                    System.out.println("mWhiteClassMap.forEach className.contains(it)  className :"+className +"       it "+it)
                     isIn = true
                     return@forEach
                 }
@@ -128,7 +110,6 @@ class Config {
      * 解析插桩配置文件
      */
     fun parseTraceConfigFile() {
-        System.out.println("parseTraceConfigFile start!!!!!!!!!!!!")
         val traceConfigFile = File(mTraceConfigFile)
         if (!traceConfigFile.exists()) {
             throw FileNotFoundException(

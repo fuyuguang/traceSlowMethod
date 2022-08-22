@@ -1,6 +1,5 @@
 package com.fyg.tracethread;
 
-import static com.fyg.util.Constant.InternalName.TelephonyManager_INTERNAL_NAME;
 import static com.fyg.util.Constant.InternalName.Thread_INTERNAL_NAME;
 
 import com.fyg.util.Constant;
@@ -102,10 +101,10 @@ public class TraceThreadVisitor extends ClassVisitor {
             super.visitMethodInsn(opcode, owner, name, desc, itf);
 
 
-            if (owner.equals(TelephonyManager_INTERNAL_NAME) && name.equals("getDeviceId") && desc.equals(MethodDesc.P_Ls_R_v)) {
-//                Log.e(Constant.TAG.TAG, "get imei className:%s, method:%s, name:%s,  desc:%s", className, methodName, name, desc);
-//                super.visitMethodInsn();
-            }
+//            if (owner.equals(TelephonyManager_INTERNAL_NAME) && name.equals("getDeviceId") && desc.equals(MethodDesc.P_Ls_R_v)) {
+////                Log.e(Constant.TAG.TAG, "get imei className:%s, method:%s, name:%s,  desc:%s", className, methodName, name, desc);
+////                super.visitMethodInsn();
+//            }
 
 
 

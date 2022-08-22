@@ -34,7 +34,7 @@ public class TraceMethodTransform extends BaseTransform{
         return ASMTransform.transformV2(file.bytes,new ASMTransform.Factory() {
             @Override
             ClassVisitor create(int ASMVersion, ClassWriter classWriter) {
-                return new TraceClassVisitorV2(ASMVersion,classWriter,config,traceMethodConfig.monitoringTimeThreshold)
+                return new TraceSlowMethodVisitor(ASMVersion,classWriter,config,traceMethodConfig.monitoringTimeThreshold)
             }
         })
     }
@@ -44,7 +44,7 @@ public class TraceMethodTransform extends BaseTransform{
         return ASMTransform.transformV2(bytes,new ASMTransform.Factory() {
             @Override
             ClassVisitor create(int ASMVersion, ClassWriter classWriter) {
-                return new TraceClassVisitorV2(ASMVersion, classWriter, config,traceMethodConfig.monitoringTimeThreshold)
+                return new TraceSlowMethodVisitor(ASMVersion, classWriter, config,traceMethodConfig.monitoringTimeThreshold)
             }
         });
     }

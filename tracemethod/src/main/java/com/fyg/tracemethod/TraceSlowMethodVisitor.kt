@@ -6,8 +6,19 @@ import org.objectweb.asm.commons.AdviceAdapter
 import java.lang.Long
 import java.util.logging.Filter
 
+/**
+ * Created by fuyuguang on 2022/8/20 4:40 下午.
+ * E-Mail ：2355245065@qq.com
+ * Wechat :fyg13522647431
+ * Tel : 13522647431
+ * 修改时间：
+ * 类描述：
+ * 备注：
+    []()
+    []()
 
-class TraceClassVisitorV2(api: Int, cv: ClassVisitor?, var traceConfig: Config, var monitoringTimeThreshold : Long) :
+ */
+class TraceSlowMethodVisitor(api: Int, cv: ClassVisitor?, var traceConfig: Config, var monitoringTimeThreshold : Long) :
     ClassVisitor(api, cv) {
 
     private var className: String? = null
@@ -207,7 +218,11 @@ class TraceClassVisitorV2(api: Int, cv: ClassVisitor?, var traceConfig: Config, 
             }
         }
 
+
         override fun visitAnnotation(descriptor: String?, visible: Boolean): AnnotationVisitor {
+
+
+//            PrintTime
             enablePrintTime = descriptor?.contains("Lcom/fyg/monitor/tracemethod/PrintTime;")
             return super.visitAnnotation(descriptor, visible)
         }

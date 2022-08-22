@@ -6,6 +6,10 @@ import static org.objectweb.asm.Opcodes.ACC_NATIVE;
 
 import org.objectweb.asm.Opcodes;
 
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
+
 /**
  * Created by fuyuguang on 2022/8/19 5:23 下午.
  * E-Mail ：2355245065@qq.com
@@ -91,6 +95,15 @@ public class FilterUtil {
     public static boolean isMethodEnd(int opcode){
         return (opcode >= Opcodes.IRETURN && opcode <= Opcodes.RETURN || opcode == Opcodes.ATHROW);
     }
+
+
+    public static String getInternalName(final Class<?> clazz) {
+        return clazz.getName().replace('.', '/');
+    }
+
+
+
+
 
 
 }

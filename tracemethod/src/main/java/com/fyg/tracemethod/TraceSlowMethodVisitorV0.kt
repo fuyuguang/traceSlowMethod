@@ -3,7 +3,7 @@ import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.commons.AdviceAdapter
 
 
-class TraceMethodVisitor(
+class TraceSlowMethodVisitorV0(
     api: Int, mv: MethodVisitor?, access: Int,
     name: String?, desc: String?, className: String?,
     var traceConfig: Config

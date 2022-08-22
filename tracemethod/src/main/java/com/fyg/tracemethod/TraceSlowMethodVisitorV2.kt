@@ -1,4 +1,5 @@
 package com.fyg.tracemethod
+import com.fyg.util.FilterUtil
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
@@ -18,7 +19,7 @@ import java.lang.Long
     []()
 
  */
-class TraceMethodVisitorV2(
+class TraceSlowMethodVisitorV2(
     api: Int, mv: MethodVisitor?, access: Int,
     name: String?, desc: String?, className: String?,
     var traceConfig: Config,  val  monitoringTimeThreshold :Long
@@ -65,7 +66,7 @@ class TraceMethodVisitorV2(
 
     override fun onMethodExit(opcode: Int) {
 
-        if (opcode >= IRETURN && opcode <= RETURN || opcode == ATHROW) {
+        if (FilterUtil.isMethodEnd(opcode)) {
             mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false)
             mv.visitVarInsn(LLOAD, slotIndex)
             mv.visitInsn(LSUB)

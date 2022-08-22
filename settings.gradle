@@ -2,3 +2,4 @@ rootProject.name = "traceMethod"
 include ':app'
 include ':tracemethod'
 include ':monitor'
+include ':annotation'
