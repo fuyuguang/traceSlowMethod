@@ -2,12 +2,12 @@ package com.fyg.trace.referencemethod;
 
 import com.fyg.util.Log;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public class ObserverManager {
+public class ReferenceMethodManager {
 
     private static final Map<String, List<String>> OBSERVERS = new HashMap<>();
 
@@ -16,7 +16,17 @@ public class ObserverManager {
 
         List<String> methodNames = OBSERVERS.get(className);
         if (methodNames == null) {
-            methodNames = new ArrayList<>();
+            methodNames = new CopyOnWriteArrayList<>();
+            OBSERVERS.put(className, methodNames);
+        }
+        methodNames.add(methodName);
+    }
+
+    public synchronized static <T> void remove(String className,String methodName) {
+
+        List<String> methodNames = OBSERVERS.get(className);
+        if (methodNames == null) {
+            methodNames = new CopyOnWriteArrayList<>();
             OBSERVERS.put(className, methodNames);
         }
         methodNames.add(methodName);

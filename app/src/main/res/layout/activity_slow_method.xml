@@ -38,6 +38,16 @@
     <Button
         app:layout_constraintTop_toBottomOf="@+id/mBtnSleep200"
         app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/mWhile_true"
+        android:text="mWhile_true"
+        android:onClick="mWhile_true"
+        android:layout_width="match_parent"
+        android:layout_height="100dip"/>
+
+
+    <Button
+        app:layout_constraintTop_toBottomOf="@+id/mWhile_true"
+        app:layout_constraintRight_toRightOf="parent"
         android:id="@+id/mGetImei"
         android:text="getImei"
         android:onClick="mGetImei"
@@ -47,6 +57,16 @@
 
     <Button
         app:layout_constraintTop_toBottomOf="@+id/mGetImei"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/ClickRepeatedly"
+        android:text="重复单击"
+        android:onClick="ClickRepeatedly"
+        android:layout_width="match_parent"
+        android:layout_height="100dip"/>
+
+
+    <Button
+        app:layout_constraintTop_toBottomOf="@+id/ClickRepeatedly"
         app:layout_constraintRight_toRightOf="parent"
         android:id="@+id/mGogoTestSlowMethodActivity"
         android:text="改类中的慢方法不会被统计，tracemethodconfig.txt文件中配置该包会被过滤"

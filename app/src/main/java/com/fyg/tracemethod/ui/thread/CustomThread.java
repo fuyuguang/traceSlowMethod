@@ -34,7 +34,10 @@ public class CustomThread extends Thread {
     @Override
     public void run() {
         long start = System.currentTimeMillis();
+        ReferenceMethodManager.add(CustomThread.TAG,CustomThread.this);
         super.run();
+        ReferenceMethodManager.remove(CustomThread.TAG,CustomThread.this);
         Log.e(TAG,"thread name:" + getName() + ", run time:" + (System.currentTimeMillis() - start));
+
     }
 }

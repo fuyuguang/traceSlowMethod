@@ -1,4 +1,6 @@
-package com.fyg.trace.referencemethod;
+package com.fyg.trace.referencemethod
+
+import com.fyg.transform.base.BaseConfig;
 
 /**
  * Created by fuyuguang on 2022/8/11 11:04 上午.
@@ -9,7 +11,7 @@ package com.fyg.trace.referencemethod;
  * 类描述：
  * 备注：
  */
-public class ReferenceMethodConfig {
+public class ReferenceMethodConfig extends BaseConfig{
 
     boolean open;
     /**

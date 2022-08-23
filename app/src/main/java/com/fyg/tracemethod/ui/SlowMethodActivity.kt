@@ -6,11 +6,16 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.telephony.TelephonyManager
 import android.view.View
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
+import com.fyg.monitor.tracemethod.DebouncingOnClickListener
 import com.fyg.monitor.tracemethod.PrintTime
 import com.fyg.tracemethod.R
+import com.fyg.tracemethod.ui.HelloWorld.exec
 import com.fyg.tracemethod.ui.test.TestSlowMethodActivity
+import com.fyg.tracemethod.ui.thread.Log
+import com.fyg.tracemethod.ui.thread.ReferenceMethodManager
 
 /**
  * Created by fuyuguang on 2022/8/12 4:40 下午.
@@ -25,6 +30,7 @@ import com.fyg.tracemethod.ui.test.TestSlowMethodActivity
  * 注意包名要改为  com/fyg/tracemethod/ui
  */
 class SlowMethodActivity : FragmentActivity() {
+    var clickCount = 0;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +48,22 @@ class SlowMethodActivity : FragmentActivity() {
         exec()
     }
 
+    /**
+     v: View,必须作为第一个参数，不然会报错，
+     该方法也必须是非静态方法
+     */
+//    @DebouncingOnClickListener
+    fun onClick(str : String,v: View,v2: View){
+
+        Log.e("fyg_click","单击了 ${(++clickCount)} 次");
+
+    }
+    fun ClickRepeatedly(v: View){
+
+        onClick("",v,View(this));
+
+    }
+
 
     fun mBtnSleep100(v: View){
         Thread.sleep(100)
@@ -55,12 +77,22 @@ class SlowMethodActivity : FragmentActivity() {
         getIMEI()
     }
 
+    fun mWhile_true(v: View){
+
+        Thread{
+            while (true){
+                Thread.sleep(4000)
+                ReferenceMethodManager.println()
+            }
+
+        }.start()
+    }
 
 
 
     fun exec() {
         Thread {
-        Thread.sleep(1300)
+        Thread.sleep(3300)
             println(11111) }.start()
     }
 

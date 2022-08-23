@@ -1,6 +1,7 @@
 package com.fyg.trace.referencemethod
 
 import com.android.build.api.transform.TransformInvocation
+import com.fyg.trace.click.DebouncingClickVisitor
 import com.fyg.transform.base.BaseTransform
 import com.fyg.util.ASMTransform
 import com.fyg.util.Log
@@ -36,7 +37,11 @@ public class TraceReferenceMethodTransform extends BaseTransform {
          return ASMTransform.transformV2(file.bytes,new ASMTransform.Factory() {
              @Override
              ClassVisitor create(int ASMVersion, ClassWriter classWriter) {
-                 return new TraceReferenceMethodVisitor(ASMVersion,classWriter,configuration.targetClassName,configuration.targetMethodName,configuration.targetMethodDesc,configuration)
+
+                 DebouncingClickVisitor debouncingClickVisitor = new DebouncingClickVisitor(ASMVersion,classWriter);
+                 return new TraceReferenceMethodVisitor(ASMVersion,debouncingClickVisitor,configuration.targetClassName,configuration.targetMethodName,configuration.targetMethodDesc,configuration)
+
+//                 return new TraceReferenceMethodVisitor(ASMVersion,classWriter,configuration.targetClassName,configuration.targetMethodName,configuration.targetMethodDesc,configuration)
              }
          });
     }
@@ -46,7 +51,10 @@ public class TraceReferenceMethodTransform extends BaseTransform {
         return   ASMTransform.transformV2(bytes,new ASMTransform.Factory() {
             @Override
             ClassVisitor create(int ASMVersion, ClassWriter classWriter) {
-                return new TraceReferenceMethodVisitor(ASMVersion,classWriter,configuration.targetClassName,configuration.targetMethodName,configuration.targetMethodDesc,configuration)
+                DebouncingClickVisitor debouncingClickVisitor = new DebouncingClickVisitor(ASMVersion,classWriter);
+                return new TraceReferenceMethodVisitor(ASMVersion,debouncingClickVisitor,configuration.targetClassName,configuration.targetMethodName,configuration.targetMethodDesc,configuration)
+
+//                return new TraceReferenceMethodVisitor(ASMVersion,classWriter,configuration.targetClassName,configuration.targetMethodName,configuration.targetMethodDesc,configuration)
             }
         })
     }

@@ -72,7 +72,15 @@ traceMethod {
 
 traceThread {
     open = true
-    logTraceInfo = true
-    traceConfigFile = "${project.projectDir}/tracemethodconfig.txt"
-    monitoringTimeThreshold = 70
+
+    String targetClassName = "java/lang/Thread";
+    String targetMethodName = "<init>";
+    String targetMethodDesc = "(Ljava/lang/Runnable;)V";
+//    int targetOpcode = Opcodes.NEW;
+
+    String replaceClassName = "com/fyg/tracemethod/ui/thread/CustomThread";
+    String replaceMethodName = "<init>";
+    String replaceMethodDesc = "(Ljava/lang/Runnable;Ljava/lang/String;)V";
+//    int replaceOpcode = Opcodes.NEW;
+
 }

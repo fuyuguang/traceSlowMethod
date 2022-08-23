@@ -60,7 +60,7 @@ public class TraceReferenceMethodVisitor extends ClassVisitor {
 
     @Override
     public void visitEnd() {
-        ObserverManager.println();
+        ReferenceMethodManager.println();
         super.visitEnd();
     }
 
@@ -91,7 +91,7 @@ public class TraceReferenceMethodVisitor extends ClassVisitor {
 
 
             if (owner.equals(targetClassName) && name.equals(targetMethodName) && desc.equals(targetMethodDesc)) {
-                ObserverManager.add(currentClassName,currentMethodName);
+                ReferenceMethodManager.add(currentClassName,currentMethodName);
 
                 super.visitMethodInsn(Opcodes.INVOKESTATIC,  configuration.getReplaceClassName(),  configuration.getReplaceMethodName(),  configuration.getReplaceMethodDesc(),  false);
                 Log.e(this, "opcode :%s  ,owner : %s  , className  : %s , method : %s, name :  %s ,  desc:%s",opcode,owner, currentClassName, currentMethodName, name, desc);
