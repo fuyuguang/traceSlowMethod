@@ -31,7 +31,7 @@ public class DebouncingClickVisitor extends ClassVisitor {
     public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
         MethodVisitor mv = super.visitMethod(access, name, descriptor, signature, exceptions);
         if (mv != null) {
-            if (FilterUtil.isGeneralMethod(access,name)
+            if (FilterUtil.isGeneralMethod(access,name) && !FilterUtil.isStatic(access)
 //                    && "onClick".equals(name) &&
 //                    descriptor.equals("(Landroid/view/View;)V")
             ) {
@@ -89,7 +89,7 @@ public class DebouncingClickVisitor extends ClassVisitor {
             methodVisitor.visitVarInsn(ALOAD, slotIndex_3);
             methodVisitor.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Long", "longValue", "()J", false);
             methodVisitor.visitInsn(LSUB);
-            methodVisitor.visitLdcInsn(new Long(300L));
+            methodVisitor.visitLdcInsn(new Long(customTime));
             methodVisitor.visitInsn(LCMP);
             methodVisitor.visitJumpInsn(IFGE, label0);
             methodVisitor.visitInsn(RETURN);

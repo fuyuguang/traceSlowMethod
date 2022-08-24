@@ -4,11 +4,9 @@ import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
 import static org.objectweb.asm.Opcodes.ACC_INTERFACE;
 import static org.objectweb.asm.Opcodes.ACC_NATIVE;
 
-import org.objectweb.asm.Opcodes;
+import static org.objectweb.asm.Opcodes.ACC_STATIC;
 
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLClassLoader;
+import org.objectweb.asm.Opcodes;
 
 /**
  * Created by fuyuguang on 2022/8/19 5:23 下午.
@@ -74,6 +72,10 @@ public class FilterUtil {
 
     public static boolean isAbstract(int access){
         return (access & ACC_ABSTRACT) != 0;//1
+    }
+
+    public static boolean isStatic(int access){
+        return (access & ACC_STATIC) != 0;//1
     }
 
     public static boolean isInterface(int access){
