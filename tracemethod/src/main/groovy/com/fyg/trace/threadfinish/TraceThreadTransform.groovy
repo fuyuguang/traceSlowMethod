@@ -34,7 +34,6 @@ public class TraceThreadTransform extends BaseTransform{
     @Override
     void init(Project project,TransformInvocation transformInvocation) {
 
-
         configuration = project.traceThread;
 //        String output = traceMethodConfig.output
 //        if (output == null || output.isEmpty()) {
@@ -50,8 +49,8 @@ public class TraceThreadTransform extends BaseTransform{
     public Config initConfig() {
 
         println '*****************-------- TraceThreadPlugin  initConfig() --------*********************'
-        configuration = project.traceThread
-        configuration.targetClassName.isBlank()
+        System.out.println(" configuration.nestExt.open initConfig() : "+project.traceThread.nestExt.mOpen)
+
         if (!configuration.targetClassName){
             configuration.targetClassName = com.fyg.util.Constant.InternalName.Thread_INTERNAL_NAME
         }
@@ -64,7 +63,7 @@ public class TraceThreadTransform extends BaseTransform{
         Config config = new Config()
 //        config.MTraceConfigFile = configuration.traceConfigFile
 //        config.MIsNeedLogTraceInfo = configuration.logTraceInfo
-        return config
+        return config;
     }
 
 

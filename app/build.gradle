@@ -45,6 +45,26 @@ dependencies {
 
 apply plugin: 'com.fyg.tracethread'
 
+
+traceThread {
+    open = true
+
+    String targetClassName = "java/lang/Thread";
+    String targetMethodName = "<init>";
+    String targetMethodDesc = "(Ljava/lang/Runnable;)V";
+//    int targetOpcode = Opcodes.NEW;
+
+    String replaceClassName = "com/fyg/tracemethod/ui/thread/CustomThread";
+    String replaceMethodName = "<init>";
+    String replaceMethodDesc = "(Ljava/lang/Runnable;Ljava/lang/String;)V";
+//    int replaceOpcode = Opcodes.NEW;
+
+    nestExt {
+        mOpen = false
+    }
+
+}
+
 apply plugin: 'com.fyg.tracemethod'
 
 apply plugin: 'com.fyg.tracereferencemethod'
@@ -69,18 +89,3 @@ traceMethod {
     monitoringTimeThreshold = 70
 }
 
-
-traceThread {
-    open = true
-
-    String targetClassName = "java/lang/Thread";
-    String targetMethodName = "<init>";
-    String targetMethodDesc = "(Ljava/lang/Runnable;)V";
-//    int targetOpcode = Opcodes.NEW;
-
-    String replaceClassName = "com/fyg/tracemethod/ui/thread/CustomThread";
-    String replaceMethodName = "<init>";
-    String replaceMethodDesc = "(Ljava/lang/Runnable;Ljava/lang/String;)V";
-//    int replaceOpcode = Opcodes.NEW;
-
-}

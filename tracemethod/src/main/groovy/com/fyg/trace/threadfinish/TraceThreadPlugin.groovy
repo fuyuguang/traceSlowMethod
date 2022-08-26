@@ -17,7 +17,14 @@ import org.gradle.api.Project
 class TraceThreadPlugin implements Plugin<Project>{
     @Override
     public void apply(Project project) {
-        project.getExtensions().create("traceThread", TraceThreadFinishConfig.class);
+//        project.getExtensions().create('traceThread', TraceThreadFinishConfig.class);
+        def matrix = project.getExtensions().create('traceThread', TraceThreadFinishConfig.class);
+//        project.tr
+//        project.traceThread.getExtensions().create('nestExt', NestExt.class);
+//        project.traceThread.getExtensions().create('nestExt', NestExt, project);
+        matrix.getExtensions().create('nestExt', NestExt.class);
+
+//        String traceConfigFile;
         println '*****************-------- TraceThreadPlugin  plugin apply  --------*********************'
         AppExtension appExtension = project.getExtensions().getByType(AppExtension.class);
         appExtension.registerTransform(new TraceThreadTransform(project));

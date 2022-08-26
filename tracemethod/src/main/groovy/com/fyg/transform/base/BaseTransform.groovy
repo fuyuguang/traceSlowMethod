@@ -24,7 +24,7 @@ import java.util.zip.ZipEntry
  * 备注：
  */
 public abstract class BaseTransform extends Transform {
-    protected Project project;
+    public Project project;
     public BaseTransform(Project project){
         this.project = project;
     }

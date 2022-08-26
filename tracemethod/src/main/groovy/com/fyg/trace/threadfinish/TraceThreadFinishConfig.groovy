@@ -2,7 +2,6 @@ package com.fyg.trace.threadfinish
 
 import com.fyg.transform.base.BaseConfig
 import org.objectweb.asm.Opcodes
-
 /**
  * Created by fuyuguang on 2022/8/11 11:04 上午.
  * E-Mail ：2355245065@qq.com
@@ -12,7 +11,8 @@ import org.objectweb.asm.Opcodes
  * 类描述：
  * 备注：
  */
-public class TraceThreadFinishConfig extends BaseConfig {
+//public class TraceThreadFinishConfig extends BaseConfig {
+public class TraceThreadFinishConfig  {
     boolean open;
     /**
      * 不能用final 修饰
@@ -29,7 +29,25 @@ public class TraceThreadFinishConfig extends BaseConfig {
     String replaceMethodDesc = "(Ljava/lang/Runnable;Ljava/lang/String;)V";
     int replaceOpcode = Opcodes.NEW;
 
+    NestExt nestExt = new NestExt();
+
     TraceThreadFinishConfig() {
         open = true;
     }
+
+//    open fun defaultConfig(action: Action<DefaultConfig>) {
+//        action.execute(defaultConfig)
+//    }
+
+//    public void nestExt(Action<NestExt> action){
+//        action.execute(nestExt)
+//    }
+
+//    public void setNestExt(Closure config) {
+//        ConfigureUtil.configure(config, nestExt);
+//    }
+//
+//    public NestExt getNestExt() {
+//        return nestExt
+//    }
 }
